@@ -33,6 +33,8 @@ public class ProductServlet extends BaseServlet {
 		JSONObject json = getJSONParameter(request);
 	    String a = json.getString("a");
 	    System.out.println("a" + a);
+//	          返回信息
+	    write(response,a);
 		
 	}
 	

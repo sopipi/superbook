@@ -3,6 +3,7 @@ package superbook.servlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
@@ -85,9 +86,28 @@ public class BaseServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * 将request请求转换为json
+	 * @param request
+	 * @return
+	 */
 	public JSONObject getJSONParameter(HttpServletRequest request) {
 		JSONObject json = JSONUtil.getJSONParameter(request);
 		return json;
+	}
+	
+//	返回书写信息
+	public void write(HttpServletResponse response, String data) {
+		try {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("text/json;character=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print(data);
+		out.flush();
+		out.close();
+		}catch(IOException e) {
+			System.out.println("返回信息失败！");
+		}
 	}
 	
 }
