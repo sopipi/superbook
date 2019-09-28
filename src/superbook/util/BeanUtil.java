@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BeanUtil {
+	@SuppressWarnings("deprecation")
 	public static <T> T getBean(Map<String, Object> data, String clzName) throws Exception{
 		
 		Class clz = Class.forName(clzName);

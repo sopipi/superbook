@@ -6,7 +6,7 @@ public class Product {
 	private int pid;
 	private int cid;//产品类别
 	private int isbn;//书籍信息
-	private float promotePrice;//出售价格
+	private double promotePrice;//出售价格
 	private Date createDate;//创建日期
 	private String subTitle;//产品描述
 	private int degree;//产品新旧成度
@@ -15,7 +15,7 @@ public class Product {
 		super();
 	}
 
-	public Product(int pid, int cid, int isbn, float promotePrice, Date createDate, String subTitle, int degree) {
+	public Product(Integer pid, Integer cid, Integer isbn, Double promotePrice, Date createDate, String subTitle, int degree) {
 		super();
 		this.pid = pid;
 		this.cid = cid;
@@ -30,7 +30,7 @@ public class Product {
 		return pid;
 	}
 
-	public void setPid(int pid) {
+	public void setPid(Integer pid) {
 		this.pid = pid;
 	}
 
@@ -38,7 +38,7 @@ public class Product {
 		return cid;
 	}
 
-	public void setCid(int cid) {
+	public void setCid(Integer cid) {
 		this.cid = cid;
 	}
 
@@ -46,15 +46,15 @@ public class Product {
 		return isbn;
 	}
 
-	public void setIsbn(int isbn) {
+	public void setIsbn(Integer isbn) {
 		this.isbn = isbn;
 	}
 
-	public float getPromotePrice() {
+	public Double getPromotePrice() {
 		return promotePrice;
 	}
 
-	public void setPromotePrice(float promotePrice) {
+	public void setPromotePrice(Double promotePrice) {
 		this.promotePrice = promotePrice;
 	}
 
@@ -78,7 +78,7 @@ public class Product {
 		return degree;
 	}
 
-	public void setDegree(int degree) {
+	public void setDegree(Integer degree) {
 		this.degree = degree;
 	}
 
@@ -97,7 +97,7 @@ public class Product {
 		result = prime * result + degree;
 		result = prime * result + isbn;
 		result = prime * result + pid;
-		result = prime * result + Float.floatToIntBits(promotePrice);
+		result = (int) (prime * result + Double.doubleToLongBits(promotePrice));
 		result = prime * result + ((subTitle == null) ? 0 : subTitle.hashCode());
 		return result;
 	}
@@ -124,7 +124,7 @@ public class Product {
 			return false;
 		if (pid != other.pid)
 			return false;
-		if (Float.floatToIntBits(promotePrice) != Float.floatToIntBits(other.promotePrice))
+		if (Double.doubleToLongBits(promotePrice) != Double.doubleToLongBits(other.promotePrice))
 			return false;
 		if (subTitle == null) {
 			if (other.subTitle != null)

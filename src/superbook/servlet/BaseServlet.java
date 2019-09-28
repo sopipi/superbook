@@ -20,6 +20,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import net.sf.json.JSONObject;
+import superbook.util.BeanUtil;
 import superbook.util.JSONUtil;
 
 
@@ -110,4 +111,20 @@ public class BaseServlet extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * 根据类名返回类对象
+	 * @param maps
+	 * @param className
+	 * @return
+	 */
+	public <T>T getBean(Map<String,Object> maps, String className) {
+		className = "superbook.bean." + className; 
+		T obj = null;
+		try {
+		obj = BeanUtil.getBean(maps, className);
+		}catch(Exception e) {
+			System.out.println("反射对象失败");
+		}
+		return obj;
+	}
 }
