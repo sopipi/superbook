@@ -58,6 +58,22 @@ public class BookDao {
 		return list;
 	}
 	
+	/**
+	 * 根据书名返回书籍详情
+	 * @param title
+	 * @return
+	 */
+	
+	public Book selectByBookTitle(String title) {
+		String sql = "select * from Book where title = ?";
+		Book book = new Book();
+		try {
+			book = DBUtil.select(sql,new BeanHandler<Book>(Book.class),title);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return book;
+	}
 	
 	/**
 	 * 根据isbn返回书籍信息

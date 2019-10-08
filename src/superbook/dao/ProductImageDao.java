@@ -14,9 +14,9 @@ public class ProductImageDao {
 	 * @param productImage
 	 */
 	public void add(ProductImage productImage) {
-		String sql = "insert into ProductImage(piid,pid,type) values (?,?,?);";
+		String sql = "insert into ProductImage(piid,pid,type,imgposition) values (?,?,?,?);";
 		try {
-			DBUtil.update(sql, productImage.getPiid(),productImage.getPid(),productImage.getType());
+			DBUtil.update(sql, productImage.getPiid(),productImage.getPid(),productImage.getType(),productImage.getImgposition());
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

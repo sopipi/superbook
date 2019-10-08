@@ -5,8 +5,8 @@ import java.util.Date;
 public class Product {
 	private int pid;
 	private int cid;//产品类别
-	private int isbn;//书籍信息
-	private double promotePrice;//出售价格
+	private String isbn;//书籍信息
+	private Double promotePrice;//出售价格
 	private Date createDate;//创建日期
 	private String subTitle;//产品描述
 	private int degree;//产品新旧成度
@@ -15,7 +15,8 @@ public class Product {
 		super();
 	}
 
-	public Product(Integer pid, Integer cid, Integer isbn, Double promotePrice, Date createDate, String subTitle, int degree) {
+	
+	public Product(int pid, int cid, String isbn, Double promotePrice, Date createDate, String subTitle, int degree) {
 		super();
 		this.pid = pid;
 		this.cid = cid;
@@ -26,11 +27,12 @@ public class Product {
 		this.degree = degree;
 	}
 
+
 	public int getPid() {
 		return pid;
 	}
 
-	public void setPid(Integer pid) {
+	public void setPid(int pid) {
 		this.pid = pid;
 	}
 
@@ -38,15 +40,15 @@ public class Product {
 		return cid;
 	}
 
-	public void setCid(Integer cid) {
+	public void setCid(int cid) {
 		this.cid = cid;
 	}
 
-	public int getIsbn() {
+	public String getIsbn() {
 		return isbn;
 	}
 
-	public void setIsbn(Integer isbn) {
+	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 
@@ -78,15 +80,10 @@ public class Product {
 		return degree;
 	}
 
-	public void setDegree(Integer degree) {
+	public void setDegree(int degree) {
 		this.degree = degree;
 	}
 
-	@Override
-	public String toString() {
-		return "Product [pid=" + pid + ", cid=" + cid + ", isbn=" + isbn + ", promotePrice=" + promotePrice
-				+ ", createDate=" + createDate + ", subTitle=" + subTitle + ", degree=" + degree + "]";
-	}
 
 	@Override
 	public int hashCode() {
@@ -95,12 +92,13 @@ public class Product {
 		result = prime * result + cid;
 		result = prime * result + ((createDate == null) ? 0 : createDate.hashCode());
 		result = prime * result + degree;
-		result = prime * result + isbn;
+		result = prime * result + ((isbn == null) ? 0 : isbn.hashCode());
 		result = prime * result + pid;
-		result = (int) (prime * result + Double.doubleToLongBits(promotePrice));
+		result = prime * result + ((promotePrice == null) ? 0 : promotePrice.hashCode());
 		result = prime * result + ((subTitle == null) ? 0 : subTitle.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -120,11 +118,17 @@ public class Product {
 			return false;
 		if (degree != other.degree)
 			return false;
-		if (isbn != other.isbn)
+		if (isbn == null) {
+			if (other.isbn != null)
+				return false;
+		} else if (!isbn.equals(other.isbn))
 			return false;
 		if (pid != other.pid)
 			return false;
-		if (Double.doubleToLongBits(promotePrice) != Double.doubleToLongBits(other.promotePrice))
+		if (promotePrice == null) {
+			if (other.promotePrice != null)
+				return false;
+		} else if (!promotePrice.equals(other.promotePrice))
 			return false;
 		if (subTitle == null) {
 			if (other.subTitle != null)
@@ -132,6 +136,13 @@ public class Product {
 		} else if (!subTitle.equals(other.subTitle))
 			return false;
 		return true;
+	}
+
+
+	@Override
+	public String toString() {
+		return "Product [pid=" + pid + ", cid=" + cid + ", isbn=" + isbn + ", promotePrice=" + promotePrice
+				+ ", createDate=" + createDate + ", subTitle=" + subTitle + ", degree=" + degree + "]";
 	}
 
 	
