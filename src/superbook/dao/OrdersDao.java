@@ -1,8 +1,11 @@
 package superbook.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+
 
 import superbook.bean.Orders;
 import superbook.util.DBUtil;
@@ -13,7 +16,7 @@ import superbook.util.DateUtil;
 
 public class OrdersDao {
 	/**
-	 * 添加订单
+	 * 添加订单  
 	 * @param order
 	 */
 	public void add(Orders order) {
@@ -122,6 +125,13 @@ public class OrdersDao {
 		}catch(Exception e ) {
 			e.printStackTrace();
 		}
+	}
+	/**
+	 * 随机生成订单
+	 */
+	public List<Orders> selectOrders() {
+	String sql="SELECT * FROM orders WHERE orders.orderState = '2' ";
+	return DBUtil.select(sql, new BeanListHandler<Orders>(Orders.class));
 	}
 	
 }

@@ -9,7 +9,7 @@ public class UserDaoTest {
 	UserDao userdao = new UserDao();
 	@Test 
 	public void add() {
-		userdao.add("2","nihao");
+		userdao.add("2","nihao","qweqwe");
 	}
 	
 	@Test
@@ -24,5 +24,18 @@ public class UserDaoTest {
 	@Test
 	public void selectnickName() {
 		System.out.println(userdao.selectnickName(3));
+	}
+	@Test
+	public void selectUser() {
+		System.out.println(userdao.selectUser("2").toString());
+	}
+	@Test 
+	public void	selectuid() {
+		System.out.println(userdao.selectuid("2"));
+	}
+	
+	@Test 
+	public void	selectUid() {
+		System.out.println(userdao.selectUid("fafa"));
 	}
 }

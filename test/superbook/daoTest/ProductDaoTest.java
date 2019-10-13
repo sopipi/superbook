@@ -21,4 +21,9 @@ public class ProductDaoTest {
 	public void changecreateDate() {
 		dao.changecreateDate(1, new Date());
 	}
+	
+	@Test
+	public void selectByPid() {
+		dao.selectByPid(1);
+	}
 }

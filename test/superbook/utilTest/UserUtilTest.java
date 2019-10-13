@@ -9,7 +9,7 @@ public class UserUtilTest {
 	
 	@Test
 	public void getUser() {
-		String code = "000";
+		String code = "0000";
 		System.out.println(userUtil.getUser(code));
 	}
 }

@@ -1,6 +1,7 @@
 package superbook.daoTest;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -45,5 +46,12 @@ public class OrderDaoTest {
 	public void changeState() {
 		dao.changeState(3,4);
 	}
-	
+	@Test
+	public void selectOrders() {
+		List<Orders> list = dao.selectOrders();
+		for(Orders o : list) {
+			System.out.println(o.toString());
+		}
+			
+	}
 }

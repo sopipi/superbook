@@ -36,16 +36,19 @@ public class ProductServlet extends BaseServlet {
 
 
 	/**
-	 * 卖书(将信息存入数据库中)
+	 * 测试完毕
+	 * 卖书(将信息存入数据库中) 
 	 * 所需参数:isbn,cid,promotePrice,subTitle,degree,uid
 	 * **
      * 所需头文件 Content-Type : application/x-www-form-urlencoded
+     * 
+     * 返回信息：flag：true
      * body form-data
 	 * @param request
 	 * @param response
 	 * @throws Exception
 	 */
-	public void add(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void sellBook(HttpServletRequest request, HttpServletResponse response) throws Exception {
     	
 //	    1、解析传入参数
 //	    2、调用图片存储，并获取地址
@@ -54,6 +57,7 @@ public class ProductServlet extends BaseServlet {
 //	    5、创建产品的箱子地址
 //		JSONObject json = getJSONParameter(request);
 		
+		int uid = Integer.parseInt(String.valueOf(request.getAttribute("uid")));
 		//解析传入参数
 		Map<String, String> map = new HashMap<>();
 		
@@ -84,31 +88,47 @@ public class ProductServlet extends BaseServlet {
 		
 		//添加Orders
 		Orders orders = new Orders();
-		orders.setUid(Integer.parseInt(map.get("uid")));
+		orders.setUid(uid);
 		orders.setPid((new ProductDao()).getPid());
-		orders.setBid(5);
+		orders.setBid(1);
 		orders.setReceiver(1);
+		orders.setOrderState(1);
 		System.out.println(orders.toString());
 		(new OrdersDao()).add(orders);
 
-		//添加book
-		Book book = (new BookDao()).selectByIsbn(product.getIsbn());
-		if(book == null) {  //如果不在数据库Book中
-			System.out.println("ProductServlet.add(书籍在数据库Book中没有)");
-			
-			//调用ShowAPI找到书籍信息,并添加到数据库
-			book = (new BookUtil()).getBook(product.getIsbn());
-			(new BookDao()).add(book);
-		
-		} else { //在数据库Book中
-			System.out.println("ProductServlet.add(书籍在数据库Book中存在)");
-			System.out.println("ProductServlet.add " + book.toString());
-		}
 		System.out.println(product.toString());
 		System.out.println(orders.toString());
-	    write(response," c");
-		
+		JSONObject result = new JSONObject();
+		result.put("flag", true);
+	    write(response,result.toString());
+	    return;
 	}
+	
+	/**
+	 * 测试完毕
+	 * 检查书籍，进行支付
+	 * 参数：uid
+	 * @param req
+	 * @param resp
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	public void checkBook(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException  {
+		int uid = (int) req.getAttribute("uid");
+		//解析传入参数
+		Map<String, Object> map = (Map)getJSONParameter(req);
+		
+		int oid = (int) map.get("oid");
+		(new OrdersDao()).changeState(oid, 2);
+		JSONObject result = new JSONObject();
+		result.put("flag", true);
+		write(resp, result.toString());
+		return;
+	}
+	
+	
+	
+	
 	
 	public void delete(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  {
 		
