@@ -40,15 +40,16 @@ public class UserServlet extends BaseServlet {
 		//连接微信服务器进行获取数据，openid和session_key
 		JSONObject json = JSONObject.fromObject(new UserUtil().getUser(code));
 		if(json.containsKey("errcode")) {//获取失败
-			write(response," shibaile ");
+			write(response,"error");
 			return;
 		}
 		
-		//存储到redis
+		JSONObject result = new JSONObject(); 
+		//获取数据
 		System.out.println("jixuzhixing");
 		String openid = json.getString("openid");
 		String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();//获取uuid
-		redis.setUser(uuid, openid);
+		
 		System.out.println("存取成功");
 		
 		//存储到mysql
@@ -58,13 +59,19 @@ public class UserServlet extends BaseServlet {
 		System.out.println(nickName);
 		User user = new UserDao().selectUser(openid);
 		if(user == null) {//数据库中不存在，第一次登陆
-			new UserDao().add(openid, nickName,uuid);
+			new UserDao().add(openid, nickName, uuid);
 			System.out.println("cundao");
-			write(response,uuid);
-			return;
+			result.put("flag", true);
+			result.put("uuid", uuid);
+			redis.setUser(uuid, openid);//存到redis
+			write(response,result.toString());
+			return ;
 		} else {
 			System.out.println("heheh");
-			write(response,"yicunzai");
+			result.put("flag", true);
+			result.put("uuid", user.getUuid());
+			redis.setUser(user.getUuid(), openid);//存到redis
+			write(response,result.toString());
 			return;
 		}
 	}

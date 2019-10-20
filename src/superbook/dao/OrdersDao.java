@@ -3,9 +3,9 @@ package superbook.dao;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.dbutils.ResultSetHandler;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
-
 
 import superbook.bean.Orders;
 import superbook.util.DBUtil;
@@ -16,11 +16,11 @@ import superbook.util.DateUtil;
 
 public class OrdersDao {
 	/**
-	 * 添加订单  
+	 * 添加订单
 	 * @param order
 	 */
 	public void add(Orders order) {
-		String sql = "insert into Orders(oid,uid,bid,orderCode,receiver,phone,userMessage,createTime,payDate,deliverDate,confirmDate,orderState,pid) values(?,?,?,?,?,?,?,?,?,?,?,?,?);";
+		String sql = "insert into orders(oid,uid,bid,orderCode,receiver,phone,userMessage,createTime,payDate,deliverDate,confirmDate,orderState,pid) values(?,?,?,?,?,?,?,?,?,?,?,?,?);";
 		try {
 			DBUtil.update(sql, order.getOid(),order.getUid(),order.getBid(),order.getOrderCode(),order.getReceiver(),order.getPhone(),order.getUserMessage(), DateUtil.dtot(order.getCreateTime()),DateUtil.dtot(order.getPayDate()),DateUtil.dtot(order.getDeliverDate()),DateUtil.dtot(order.getConfirmDate()), order.getOrderState(),order.getPid());
 		}catch(Exception e) {
@@ -33,7 +33,7 @@ public class OrdersDao {
 	 * @param oid
 	 */
 	public void delete(int oid) {
-		String sql = "delete from Orders where oid = ?;";
+		String sql = "delete from orders where oid = ?;";
 		try {
 			DBUtil.update(sql, oid);
 		}catch(Exception e) {
@@ -47,7 +47,7 @@ public class OrdersDao {
 	 * @return
 	 */
 	public Orders selectByOid(int oid) {
-		String sql = "select * from Orders where oid = ?;";
+		String sql = "select * from orders where oid = ?;";
 		Orders order = new Orders();
 		try {
 			order = DBUtil.select(sql,new BeanHandler<Orders>(Orders.class), oid);
@@ -64,7 +64,7 @@ public class OrdersDao {
 	 * @param phone 买家电话
 	 */
 	public void changeUser(int oid,int receiver, String userMessage,String phone) {
-		String sql = "update Orders set receiver =? ,userMessage= ?, phone=? where oid = ?;";
+		String sql = "update orders set receiver =? ,userMessage= ?, phone=? where oid = ?;";
 		try {
 			DBUtil.update(sql, receiver,userMessage,phone,oid);
 		}catch(Exception e ) {
@@ -78,7 +78,7 @@ public class OrdersDao {
 	 * @param payDate
 	 */
 	public void changePayDate(int oid,Date payDate) {
-		String sql = "update Orders set payDate =? where oid = ?;";
+		String sql = "update orders set payDate =? where oid = ?;";
 		try {
 			DBUtil.update(sql, DateUtil.dtot(payDate),oid);
 		}catch(Exception e ) {
@@ -105,7 +105,7 @@ public class OrdersDao {
 	 * @param confirmDate
 	 */
 	public void changeconfirmDate(int oid,Date confirmDate) {
-		String sql = "update Orders set  confirmDate =? where oid = ?;";
+		String sql = "update orders set  confirmDate =? where oid = ?;";
 		try {
 			DBUtil.update(sql, DateUtil.dtot( confirmDate),oid);
 		}catch(Exception e ) {
@@ -119,12 +119,115 @@ public class OrdersDao {
 	 * @param orderState
 	 */
 	public void changeState(int oid , int orderState) {
-		String sql = "update Orders set  orderState =? where oid = ?;";
+		String sql = "update orders set  orderState =? where oid = ?;";
 		try {
 			DBUtil.update(sql, orderState,oid);
 		}catch(Exception e ) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 新添加
+	 * 修改订单的bid
+	 * @param oid
+	 * @param bid
+	 */
+	public void changeBid(int oid, int bid) {
+		String sql = "update orders set bid=? where oid=?;";
+		try {
+			DBUtil.update(sql, bid, oid);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 新添加
+	 * 根据pid返回订单状态
+	 * @param pid
+	 */
+	public int getOrderStateByPid(int pid) {
+		String sql = "select orderState from orders where pid = ?;";
+		int orderState = 0;
+		try {
+			orderState = Integer.parseInt(DBUtil.select(sql, pid));
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return orderState;
+	}
+	
+	/**
+	 * 新添加
+	 * 根据pid返回订单全部信息
+	 * @param pid
+	 * @return
+	 */
+	public Orders selectByPid(int pid) {
+		String sql = "select * from orders where pid=?;";
+		Orders order = new Orders();
+		try {
+			order = DBUtil.select(sql, new BeanHandler<Orders>(Orders.class), pid);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return order;
+	}
+	
+	/**
+	 * 新添加
+	 * 更新此订单的全部信息
+	 * @param o
+	 */
+	public void updateOrder(Orders o) {
+		String sql = "update orders set bid=?,orderCode=?,receiver=?,phone=?,userMessage=?,createTime=?,payDate=?,deliverDate=?,confirmDate=?,orderState=? where pid=?;";
+		try {
+			DBUtil.update(sql, o.getBid(),o.getOrderCode(),o.getReceiver(),o.getPhone(),o.getUserMessage(),o.getCreateTime(),o.getPayDate(),o.getDeliverDate(),o.getConfirmDate(),o.getOrderState(),o.getPid());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 根据uid返回他卖的全部订单
+	 * @param uid
+	 * @return
+	 */
+	public List<Orders> selectByUid(int uid) {
+		String sql = "select * from orders where uid = ?";
+		ResultSetHandler<List<Orders>> rsh = new BeanListHandler<Orders>(Orders.class);
+		List<Orders> list = null;
+		try {
+			list = DBUtil.select(sql,rsh,uid);
+			for(Orders o : list) {
+				System.out.println(o);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+
+	/**
+	 * 根据receiver返回他买的全部订单
+	 * @param receiver
+	 * @return
+	 */
+	public List<Orders> selectByReceiver(int receiver) {
+		String sql = "select * from orders where receiver= ?";
+		ResultSetHandler<List<Orders>> rsh = new BeanListHandler<Orders>(Orders.class);
+		List<Orders> list = null;
+		try {
+			list = DBUtil.select(sql,rsh,receiver);
+			for(Orders o : list) {
+				System.out.println(o.toString());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	/**
 	 * 随机生成订单
@@ -133,5 +236,4 @@ public class OrdersDao {
 	String sql="SELECT * FROM orders WHERE orders.orderState = '2' ";
 	return DBUtil.select(sql, new BeanListHandler<Orders>(Orders.class));
 	}
-	
 }

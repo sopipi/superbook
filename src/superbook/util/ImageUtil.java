@@ -117,7 +117,7 @@ public class ImageUtil {
 	     }catch (IOException e) {
 	    	 e.printStackTrace();
 	     }
-		String url = "http://sopipi.club:8092/translate/img/product/" +  fileName + ".jpg";
+		String url = "http://sopipi.club:8092/superbook/img/product/" +  fileName + ".jpg";
 		return url;
 	}
 

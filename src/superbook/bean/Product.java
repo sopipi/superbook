@@ -3,20 +3,20 @@ package superbook.bean;
 import java.util.Date;
 
 public class Product {
-	private int pid;
-	private int cid;//产品类别
+	private Integer pid;
+	private Integer cid;//产品类别
 	private String isbn;//书籍信息
 	private Double promotePrice;//出售价格
 	private Date createDate;//创建日期
 	private String subTitle;//产品描述
-	private int degree;//产品新旧成度
+	private Integer degree;//产品新旧成度
 	
 	public Product() {
 		super();
 	}
 
 	
-	public Product(int pid, int cid, String isbn, Double promotePrice, Date createDate, String subTitle, int degree) {
+	public Product(Integer pid, Integer cid, String isbn, Double promotePrice, Date createDate, String subTitle, Integer degree) {
 		super();
 		this.pid = pid;
 		this.cid = cid;
@@ -28,19 +28,19 @@ public class Product {
 	}
 
 
-	public int getPid() {
+	public Integer getPid() {
 		return pid;
 	}
 
-	public void setPid(int pid) {
+	public void setPid(Integer pid) {
 		this.pid = pid;
 	}
 
-	public int getCid() {
+	public Integer getCid() {
 		return cid;
 	}
 
-	public void setCid(int cid) {
+	public void setCid(Integer cid) {
 		this.cid = cid;
 	}
 
@@ -76,11 +76,11 @@ public class Product {
 		this.subTitle = subTitle;
 	}
 
-	public int getDegree() {
+	public Integer getDegree() {
 		return degree;
 	}
 
-	public void setDegree(int degree) {
+	public void setDegree(Integer degree) {
 		this.degree = degree;
 	}
 

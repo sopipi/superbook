@@ -8,7 +8,7 @@ public class RedisUtilTest {
 	private RedisUtil redis = new RedisUtil();
 	@Test
 	public void setUser() {
-		redis.setUser("12", "123");
+		redis.setUser("1", "1");
 	}
 	
 	

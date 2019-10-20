@@ -21,7 +21,7 @@ public class ProductDao {
 	 * @param p
 	 */
 	public void add(Product p) {
-		String sql = "insert into Product(pid,cid,isbn,promotePrice,createDate,subTitle,degree) values(?,?,?,?,?,?,?);";
+		String sql = "insert into product(pid,cid,isbn,promotePrice,createDate,subTitle,degree) values(?,?,?,?,?,?,?);";
 		try {
 			DBUtil.update(sql, p.getPid(),p.getCid(),p.getIsbn(),p.getPromotePrice(),DateUtil.dtot(p.getCreateDate()),p.getSubTitle(),p.getDegree());
 		}catch(Exception e) {
@@ -34,7 +34,7 @@ public class ProductDao {
 	 * @param pid
 	 */
 	public void delete(int pid) {
-		String sql = "delete from Product where pid = ?;";
+		String sql = "delete from product where pid = ?;";
 		try {
 			DBUtil.update(sql, pid);
 		}catch(Exception e) {
@@ -48,7 +48,7 @@ public class ProductDao {
 	 * @return
 	 */
 	public Product selectByPid(int pid) {
-		String sql = "select * from Product where pid=?;";
+		String sql = "select * from product where pid=?;";
 		Product p = new Product();
 		try {
 			p = DBUtil.select(sql, new BeanHandler<Product>(Product.class), pid);
@@ -66,7 +66,7 @@ public class ProductDao {
 	 */
 	
 	public Product selectByISBN(String isbn) {
-		String sql = "select * from Product where isbn=?;";
+		String sql = "select * from product where isbn=?;";
 		Product p = new Product();
 		try {
 			p = DBUtil.select(sql, new BeanHandler<Product>(Product.class), isbn);
@@ -83,7 +83,7 @@ public class ProductDao {
 	 * @return
 	 */
 	public List<Product> selectListByISBN(String isbn) {
-		String sql = "select * from Product where isbn = ?";
+		String sql = "select * from product where isbn = ?";
 		ResultSetHandler<List<Product>> rsh = new BeanListHandler<Product>(Product.class);
 		List<Product> list = null;
 		try {
@@ -103,7 +103,7 @@ public class ProductDao {
 	 * @param degree
 	 */
 	public void changedegree(int pid , int degree) {
-		String sql = "update Product set  degree =? where pid = ?;";
+		String sql = "update product set  degree =? where pid = ?;";
 		try {
 			DBUtil.update(sql, degree,pid);
 		}catch(Exception e ) {
@@ -117,7 +117,7 @@ public class ProductDao {
 	 * @param promotePrice
 	 */
 	public void changepromotePrice(int pid , int promotePrice) {
-		String sql = "update Product set  promotePrice =? where pid = ?;";
+		String sql = "update product set  promotePrice =? where pid = ?;";
 		try {
 			DBUtil.update(sql, promotePrice,pid);
 		}catch(Exception e ) {
@@ -131,7 +131,7 @@ public class ProductDao {
 	 * @param createDate
 	 */
 	public void changecreateDate(int pid , Date createDate) {
-		String sql = "update Product set  createDate =? where pid = ?;";
+		String sql = "update product set  createDate =? where pid = ?;";
 		try {
 			DBUtil.update(sql, DateUtil.dtot(createDate),pid);
 		}catch(Exception e ) {
@@ -161,13 +161,13 @@ public class ProductDao {
 	 * @return
 	 */
 	public List<Product> selectByCid(int cid) {
-		String sql = "select * from Product where cid = ?;";
+		String sql = "select * from product where cid = ?;";
 		ResultSetHandler<List<Product>> rsh = new BeanListHandler<Product>(Product.class);
 		List<Product> list = null;
 		try {
 			list = DBUtil.select(sql, rsh, cid);
 			for(Product p : list) {
-				System.out.println("ProductDao.selectByCid:  " + p);
+				System.out.println("productDao.selectByCid:  " + p);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();

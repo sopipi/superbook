@@ -15,14 +15,15 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import superbook.bean.Book;
+import superbook.bean.OrderItem;
 import superbook.bean.Orders;
 import superbook.bean.Product;
 import superbook.bean.ProductImage;
 import superbook.dao.BookDao;
+import superbook.dao.OrderItemDao;
 import superbook.dao.OrdersDao;
 import superbook.dao.ProductDao;
 import superbook.dao.ProductImageDao;
-import superbook.util.BookUtil;
 import superbook.util.ImageUtil;
 
 /**
@@ -33,10 +34,8 @@ import superbook.util.ImageUtil;
 		)
 public class ProductServlet extends BaseServlet {
 	private static final long serialVersionUID = 1L;
-
-
 	/**
-	 * 测试完毕
+	 * 测试完毕 good
 	 * 卖书(将信息存入数据库中) 
 	 * 所需参数:isbn,cid,promotePrice,subTitle,degree,uid
 	 * **
@@ -50,7 +49,7 @@ public class ProductServlet extends BaseServlet {
 	 */
 	public void sellBook(HttpServletRequest request, HttpServletResponse response) throws Exception {
     	
-//	    1、解析传入参数
+//	    1、解析传入参数 
 //	    2、调用图片存储，并获取地址
 //	    3、根据ISBN码创建书籍信息
 //	    4、创建产品信息，包括图片存储位置
@@ -104,8 +103,8 @@ public class ProductServlet extends BaseServlet {
 	    return;
 	}
 	
-	/**
-	 * 测试完毕
+/**
+	 * 测试完毕 good
 	 * 检查书籍，进行支付
 	 * 参数：uid
 	 * @param req
@@ -128,27 +127,71 @@ public class ProductServlet extends BaseServlet {
 	
 	
 	
-	
-	
-	public void delete(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException  {
-		
-	}
-	
 	/**
-	 * 首页展示(根据类别cid展示书籍)
-	 * 所需参数:cid
+	 * 测试完
+	 * 商品加入购物车 good
+	 * 所需参数: pid,uid
 	 * @param request
 	 * @param response
 	 */
-	public void showOrderListByCategory(HttpServletRequest request, HttpServletResponse response) {
-		//解析传入参数
-		Map<String, Object> map = (Map)getJSONParameter(request);
+	public void addToCart(HttpServletRequest request, HttpServletResponse response) {
+		//解析上传参数
+		Map<String, Object> map = (Map) getJSONParameter(request);
+		int uid = (int)request.getAttribute("uid");
+		//int uid = 2;
+		int pid = (int)map.get("pid");
+		OrderItem orderItem = new OrderItem();
+		orderItem.setUid(uid);
+		orderItem.setOid((new OrdersDao().selectByPid(pid)).getOid());
+		//添加到购物车数据库,由于每个product只有一个,所以num默认为1,如果此订单已经存在,则不添加
+		orderItem.setNumber(1);
+		new OrderItemDao().add(orderItem);
+		//返回前端信息
+		JSONObject json = new JSONObject();
+		json.put("flag", "true");
+		write(response, json.toString());
+	}
+	
+	/**
+	 * 测试完 good
+	 * 商品从购物车删除
+	 * 所需参数: pid,uid
+	 * @param request
+	 * @param response
+	 */
+	public void deleteFromCart(HttpServletRequest request, HttpServletResponse response) {
+		//解析上传参数
+		Map<String, Object> map = (Map) getJSONParameter(request);
+		int uid = (int)request.getAttribute("uid");
+		//int uid = 2;
+		int pid = (int)map.get("pid");
+		int oid = (new OrdersDao().selectByPid(pid).getOid());
+		new OrderItemDao().delete(uid, oid);
 		
-		//根据cid获取书籍
-		int cid = (int)map.get("cid");
-		System.out.println("ProductServlet.showOrderListByCategory: " + cid);
-		List<Product> list = new ProductDao().selectByCid(cid);
+		//返回前端信息
+		JSONObject json = new JSONObject();
+		json.put("flag", "true");
+		write(response, json.toString());
+	} 
+	
+	
+	/**
+	 * 测试完 good
+	 * 展示购物车内容
+	 * 所需参数: uid
+	 * @param request
+	 * @param response
+	 */
+	public void showCart(HttpServletRequest request, HttpServletResponse response) {
+		//解析上传参数
+		Map<String, Object> map = (Map) getJSONParameter(request);
+		int uid = (int)request.getAttribute("uid");
+		//int uid = 2;
+		//返回此uid的全部订单
+		List<Product> list = new OrderItemDao().selectByUid(uid);
+		System.out.println(list.size());
 		JSONArray jsonArray = new JSONArray();
+		//遍历订单并将Product与book信息拼接
 		for(Product product : list) {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("product", product);
@@ -156,10 +199,9 @@ public class ProductServlet extends BaseServlet {
 			jsonArray.add(jsonObject);
 		}
 		write(response,jsonArray.toString());
-	}
+	}	
 	
-	
-	/**
+/**
 	 * 搜索框（根据书名，返回书籍订单列表）
 	 * 所需参数：bookname，
 	 * 返回参数：Book对象、Product对象

@@ -59,7 +59,9 @@ public class UserPowerFilter implements Filter {
 		String uri = req.getRequestURI();//形如/test/2432424.jsp?asdasd
 		System.out.println(uri);
 		uri = StringUtils.remove(uri, contextPath);
-		
+		if(uri.startsWith("/admin_User")) {
+			chain.doFilter(req, rep);
+		}
 		if(uri.startsWith("/admin")) {//用户鉴权
 			//获取数据code，从请求头中获取
 			String uuid = (String) req.getParameter("uuid");//存在于web端和服务器端 req.getAttribute(name)只在web组件端
@@ -119,7 +121,7 @@ public class UserPowerFilter implements Filter {
 			return result;
 		}
 		
-		//存储到redis
+		//获取openid和uuid
 		System.out.println("jixuzhixing");
 		String openid = json.getString("openid");
 		String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();//获取uuid
@@ -137,11 +139,13 @@ public class UserPowerFilter implements Filter {
 			System.out.println("cundao");
 			result.put("flag", true);
 			result.put("uuid", uuid);
+			redis.setUser(uuid, openid);//存到redis
 			return result;
 		} else {
 			System.out.println("heheh");
 			result.put("flag", true);
 			result.put("uuid", user.getUuid());
+			redis.setUser(user.getUuid(), openid);//存到redis
 			return result;
 		}
 		
