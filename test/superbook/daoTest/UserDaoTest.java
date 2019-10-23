@@ -38,4 +38,10 @@ public class UserDaoTest {
 	public void	selectUid() {
 		System.out.println(userdao.selectUid("fafa"));
 	}
+	
+	
+	@Test 
+	public void	selectUuid() {
+		System.out.println(userdao.selectUuid(1));
+	}
 }

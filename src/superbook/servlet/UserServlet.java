@@ -30,7 +30,7 @@ public class UserServlet extends BaseServlet {
 	 * @throws IOException
 	 * 所需参数：nickname、（code）、uuid
 	 */
-	public void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void test(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		RedisUtil redis = new RedisUtil();
 		
@@ -75,5 +75,20 @@ public class UserServlet extends BaseServlet {
 			return;
 		}
 	}
-
+	
+	
+	public void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		int uid =(int) request.getAttribute("uid");
+		System.out.println("quchu" + uid);
+		
+		JSONObject result = new JSONObject(); 
+		
+		String uuid = new UserDao().selectUuid(uid);
+		result.put("flag", true);
+		result.put("uuid", uuid);
+		write(response,result.toString());
+		return ;
+	}
+		
 }

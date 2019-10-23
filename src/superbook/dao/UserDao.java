@@ -118,4 +118,20 @@ public class UserDao {
 		}
 		return result; 
 	}
+	
+	/**
+	 * 根据uid查询uuid
+	 * @param uid
+	 * @return
+	 */
+	public String selectUuid(int uid) {
+		String sql = "select uuid from user where uid = ?";
+		String result = null;
+		try {
+			result = DBUtil.select(sql, uid);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result; 
+	}
 }
